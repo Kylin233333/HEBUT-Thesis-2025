@@ -32,7 +32,7 @@
 \RequirePackage{booktabs}             % 提供了创建高质量表格的命令
 \RequirePackage{tabularx}             % 使表格的列宽可以自动调整
 \RequirePackage{ifthen}               % 添加条件语句包
-\RequirePackage{hyperref}
+\RequirePackage{hyperref}             % 提供超链接功能
 
 \addbibresource{bibliography.bib}           % 指定参考文献数据库文件（.bib 文件）
 \allowdisplaybreaks                         % 允许在数学环境中自动进行跨页断行
@@ -48,13 +48,17 @@
 \newcommand{\deletetitletwo}[1]{\def\hebutthesis@deletetitletwo{#1}}
 \renewcommand{\author}[1]{\def\hebutthesis@author{#1}}        % 对命令‘\author’的重新定义，因为report标准类没有
 \newcommand{\studentID}[1]{\def\hebutthesis@studentID{#1}}    % 定义全新的命令
-\newcommand{\college}[1]{\def\hebutthesis@college{#1}}
+\newcommand{\class}[1]{\def\hebutthesis@class{#1}}
 \newcommand{\major}[1]{\def\hebutthesis@major{#1}}
 \newcommand{\supervisor}[1]{\def\hebutthesis@supervisor{#1}}
+\newcommand{\reviewer}[1]{\def\hebutthesis@reviewer{#1}}
 \newcommand{\hebutThesisTime}[1]{\def\hebutthesis@hebutThesisTime{#1}}
 \newCJKfontfamily{\fzxbsjt}{fzxbsjt.ttf}     % 定义新中日韩字体家族，命令为\fzxbsjt（方正小标宋简体），文件为fzxbsjt.ttf
 % \usepackage{fontspec}
 %\newfontfamily\fzxbsjt{fzxbsjt.ttf}
+
+
+
 \renewcommand{\headrulewidth}{0.5pt}         % 重新定义页面顶部规则线宽度为0.5磅
 \tcbset{                          % 属于tcolorbox包，创建带有可选彩色背景的文本框
   height=0.85\textheight ,        % 本框的高度为文档总文本高度的85%
@@ -71,58 +75,60 @@
 \DeclareOption{design}{\@isdesignfalse}
 
 % 设置封面
+% 根据2025年模板修改原封面 调整顺序，字号大小，字体，行间距，页边距等
 \renewcommand{\maketitle}[0]{     % 重新定义\maketitle，不允许输入参数
   \newgeometry{                         % 调整页面布局
-  top        = 2.6cm,%2.41 2.5        % 上边距2.6cm，
-  bottom     = 2.7cm, %2.73 %2.68     
-  left       = 3.5cm, %3.4
-  right      = 1.65cm,
+  top        = 2.5cm,%2.41 2.5        
+  bottom     = 2.5cm, %2.73 %2.68     
+  left       = 3.7cm,   %2.8cm页边距加0.9cm装订线
+  right      = 1.8cm,
   headheight = 1.0cm,                 % 页眉高度1cm
-  headsep    = 0.64cm,                % 页眉和正文之间的距离（分隔）设置为0.64cm
-  footskip   = 0.79cm                 % 页脚底部与正文底部之间的距离设置为0.79cm
+  headsep    = 1.0cm,                % 页眉和正文之间的距离（分隔）设置为1.04cm
+  footskip   = 0.75cm                 % 页脚底部与正文底部之间的距离设置为0.79cm
   }
   \begin{titlepage}         % 创建自定义标题页
     \begin{center}          % 居中显示
       \vspace*{2.36cm}      % 强制在页面的顶部添加2.36cm的空白空间
-      \fontsize{26}{0}\kaishu{河\quad 北\quad 工\quad 业\quad 大\quad 学}   % 字号设置26磅，行间距默认，楷书，\quad为空格
+      \fontsize{26}{0}\heiti{河\quad 北\quad 工\quad 业\quad 大\quad 学}   % 字号设置26磅，行间距默认，楷书，\quad为空格
       \vskip 26pt           % 垂直方向上添加空白空间26磅
       \if@isdesign
       \fontsize{44}{0}\heiti{毕\qquad 业\qquad 论\qquad 文}    % 字体“黑体”
       \def\doctype{毕业论文}
       \else
-      \fontsize{36}{0}\fzxbsjt{毕业设计说明书}    % 字体“方正小标宋简体”
+      \fontsize{44}{0}\heiti{毕\qquad 业\qquad 设\qquad 计}    % 字体“黑体”
       \def\doctype{毕业设计说明书}
       \fi
       
       \vskip 52pt
       \renewcommand\arraystretch{1.6}           % 调整局部表格行高为默认的1.6倍
       \begin{tabular}{c c}                      % 创建一个2列居中对齐的表格
-        \fontsize{15}{0}\songti{作\qquad 者：}&\fontsize{16}{0}\kaishu\uline{\makebox[7em][c]{\hebutthesis@author}}   
-        % 字号15磅，默认行间距，宋体；字号16磅，楷书，下划线，创建一个宽度为7个中文字符宽度的盒子，并且盒子内的内容居中对齐，用于动态插入作者名字
-        \fontsize{15}{0}\songti{学\qquad 号：}\Large\uline{\makebox[7em][c]{\hebutthesis@studentID}}\\      % \Large表示比默认字体大一号，\表示换行
-        \fontsize{15}{0}\songti{学\qquad 院：}&\fontsize{16}{0}\kaishu\uline{\makebox[24em][c]{\hebutthesis@college}} \\
-        \fontsize{15}{0}\songti{系(专业)：}&\fontsize{16}{0}\kaishu\uline{\makebox[24em][c]{\hebutthesis@major}}\\
         \ifthenelse{\equal{\hebutthesis@deletetitletwo}{1}}
           {
-            \fontsize{15}{0}\songti{题\qquad 目：}&\fontsize{16}{0}\kaishu\uline{\makebox[24em][c]{\hebutthesis@titleone}} \\
+            \fontsize{15}{0}\textbf{\songti{题\qquad \qquad 目：}}&\fontsize{16}{0}\songti\uline{\makebox[24em][c]{\hebutthesis@titleone}} \\
           }
           {
-            \fontsize{15}{0}\songti{题\qquad 目：}&\fontsize{16}{0}\kaishu\uline{\makebox[24em][c]{\hebutthesis@titleone}} \\
-            &\fontsize{16}{0}\kaishu\uline{\makebox[24em][c]{\hebutthesis@titletwo}}
+            \fontsize{15}{0}\textbf{\songti{题\qquad \qquad  目：}}&\fontsize{16}{0}\songti\uline{\makebox[24em][c]{\hebutthesis@titleone}} \\
+            &\fontsize{16}{0}\songti\uline{\makebox[24em][c]{\hebutthesis@titletwo}}\\
           }
+        \fontsize{15}{0}\textbf{\songti{专\qquad \qquad  业：}}&\fontsize{16}{0}\songti\uline{\makebox[24em][c]{\hebutthesis@major}}\\  
+        \fontsize{15}{0}\textbf{\songti{作\qquad \qquad  者：}}&\fontsize{16}{0}\songti\uline{\makebox[24em][c]{\hebutthesis@author \qquad \hebutthesis@studentID}}\\   
+        % \fontsize{15}{0}\heiti{学\qquad 号：}\Large\uline{\makebox[7em][c]{\hebutthesis@studentID}}\\      % \Large表示比默认字体大一号，\表示换行
+        % \fontsize{15}{0}\heiti{学\qquad 院：}&\fontsize{16}{0}\kaishu\uline{\makebox[24em][c]{\hebutthesis@college}} \\
+        \fontsize{15}{0}\textbf{\songti{班\qquad \qquad  级：}}&\fontsize{16}{0}\songti\uline{\makebox[24em][c]{\hebutthesis@class}}\\
+        \fontsize{15}{0}\textbf{\songti{指导教师姓名：}}&\fontsize{16}{0}\songti\uline{\makebox[24em][c]{\hebutthesis@supervisor}} \\
       \end{tabular}
       \ifthenelse{\equal{\hebutthesis@deletetitletwo}{1}}
         {
-          \vskip 78pt
+          \vskip 150pt
           \vskip 35pt
         }
         {
-          \vskip 78pt
+          \vskip 150pt          % 根据2025年模板修改原空白空间78pt至150pt
         }
       \renewcommand\arraystretch{2.4}
       \begin{tabular}{c c}
-        \fontsize{15}{0}\songti{指导者：}&\fontsize{16}{0}\kaishu\uline{\makebox[20em][c]{\hebutthesis@supervisor}} \\
-        \fontsize{15}{0}\songti{评阅者：}&\fontsize{16}{0}\kaishu\uline{\makebox[20em][c]{}}\\
+        % \fontsize{15}{0}\heiti{指导者：}&\fontsize{16}{0}\kaishu\uline{\makebox[20em][c]{\hebutthesis@supervisor}} \\
+        \fontsize{15}{0}\heiti{评阅者：}&\fontsize{16}{0}\kaishu\uline{\makebox[24em][c]{\hebutthesis@reviewer}}\\
       \end{tabular}
       \renewcommand\arraystretch{1.2}
 
