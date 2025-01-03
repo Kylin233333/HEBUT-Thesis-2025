@@ -92,24 +92,37 @@
       \fontsize{26}{0}\heiti{河\quad 北\quad 工\quad 业\quad 大\quad 学}   % 字号设置26磅，行间距默认，楷书，\quad为空格
       \vskip 26pt           % 垂直方向上添加空白空间26磅
       \if@isdesign
-      \fontsize{44}{0}\heiti{毕\qquad 业\qquad 论\qquad 文}    % 字体“黑体”
+      \fontsize{44}{0}\heiti{毕\qquad \quad 业\qquad \quad 论\qquad \quad 文}    % 字体“黑体”
       \def\doctype{毕业论文}
       \else
-      \fontsize{44}{0}\heiti{毕\qquad 业\qquad 设\qquad 计}    % 字体“黑体”
+      \fontsize{44}{0}\heiti{毕\qquad \quad 业\qquad \quad 设\qquad \quad 计}    % 字体“黑体”
       \def\doctype{毕业设计说明书}
       \fi
       
       \vskip 52pt
       \renewcommand\arraystretch{1.6}           % 调整局部表格行高为默认的1.6倍
       \begin{tabular}{c c}                      % 创建一个2列居中对齐的表格
+        \if@isdesign
         \ifthenelse{\equal{\hebutthesis@deletetitletwo}{1}}
           {
-            \fontsize{15}{0}\textbf{\songti{题\qquad \qquad 目：}}&\fontsize{16}{0}\songti\uline{\makebox[24em][c]{\hebutthesis@titleone}} \\
+            \fontsize{15}{0}\textbf{\songti{毕业论文题目：}}&\fontsize{16}{0}\songti\uline{\makebox[24em][c]{\hebutthesis@titleone}} \\
           }
           {
-            \fontsize{15}{0}\textbf{\songti{题\qquad \qquad  目：}}&\fontsize{16}{0}\songti\uline{\makebox[24em][c]{\hebutthesis@titleone}} \\
+            \fontsize{15}{0}\textbf{\songti{毕业论文题目：}}&\fontsize{16}{0}\songti\uline{\makebox[24em][c]{\hebutthesis@titleone}} \\
             &\fontsize{16}{0}\songti\uline{\makebox[24em][c]{\hebutthesis@titletwo}}\\
           }
+        \def\doctype{毕业论文}
+        \else
+        \ifthenelse{\equal{\hebutthesis@deletetitletwo}{1}}
+          {
+            \fontsize{15}{0}\textbf{\songti{毕业设计题目：}}&\fontsize{16}{0}\songti\uline{\makebox[24em][c]{\hebutthesis@titleone}} \\
+          }
+          {
+            \fontsize{15}{0}\textbf{\songti{毕业设计题目：}}&\fontsize{16}{0}\songti\uline{\makebox[24em][c]{\hebutthesis@titleone}} \\
+            &\fontsize{16}{0}\songti\uline{\makebox[24em][c]{\hebutthesis@titletwo}}\\
+          }
+        \def\doctype{毕业设计说明书}
+        \fi
         \fontsize{15}{0}\textbf{\songti{专\qquad \qquad  业：}}&\fontsize{16}{0}\songti\uline{\makebox[24em][c]{\hebutthesis@major}}\\  
         \fontsize{15}{0}\textbf{\songti{作\qquad \qquad  者：}}&\fontsize{16}{0}\songti\uline{\makebox[24em][c]{\hebutthesis@author \qquad \hebutthesis@studentID}}\\   
         % \fontsize{15}{0}\heiti{学\qquad 号：}\Large\uline{\makebox[7em][c]{\hebutthesis@studentID}}\\      % \Large表示比默认字体大一号，\表示换行
@@ -142,6 +155,7 @@
 
 % 设定目录格式
 
+\setcounter{tocdepth}{1} % 设置目录深度为1，即只显示章和节,如需显示到子节，将1改为2
 \setlength{\cftsecindent}{0pt} % 对于section取消目录的缩进
 \setlength{\cftsubsecindent}{0pt} % 对于subsection取消目录的缩进
 \renewcommand{\cfttoctitlefont}{\hfil\bfseries\heiti\zihao{4}\selectfont}   % 设置目录样式黑体四号居中中间七个空格
@@ -179,7 +193,8 @@
     chapter={
         name={},                              % 章节标题前不自动添加任何前缀（如“第一章”中的“第”和“章”），只显示章节的数字和标题文本
         number = \arabic{chapter},            % 章节编号使用阿拉伯数字
-        format={\bfseries\heiti\zihao{-3}},   % 黑体加粗小三
+        format={\bfseries\heiti\zihao{-3}},   % 黑体加粗小三     
+        % 此处官方文件标注为小四号，但实际上文档是小三号，未作修改
         aftername={\quad},                    % 章节编号和标题文本之间的间距一个空格
         beforeskip={.5\baselineskip},         % 段前0.5行
         afterskip={.5\baselineskip},
